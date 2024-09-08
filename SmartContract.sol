@@ -1,38 +1,60 @@
+// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-contract SimpleContract {
-    address public owner;
-    mapping (address => uint) public balances;
-    mapping (address => bool) public isFrozen;
+contract Crowdfunding {
+    address public creator;
+    uint public goal;
+    uint public endTime;
+    uint public totalFunds;
+    mapping(address => uint) public contributions;
+    bool public goalReached;
+    bool public campaignEnded;
 
-    constructor() public {
-        owner = msg.sender;
-        balances[owner] = 1000;
-        isFrozen[owner] = false;
+    event FundReceived(address contributor, uint amount);
+    event CampaignFinished(bool successful, uint totalAmount);
+
+    constructor(uint _goal, uint _duration) {
+        creator = msg.sender;
+        goal = _goal;
+        endTime = block.timestamp + _duration;
     }
 
-    function transfer(address recipient, uint amount) public {
-        require(balances[msg.sender] >= amount, "Insufficient balance");
-        require(!isFrozen[msg.sender], "Account is frozen");
-        balances[msg.sender] -= amount;
-        balances[recipient] += amount;
+    function contribute() public payable {
+        require(block.timestamp < endTime, "Campaign has ended");
+        require(!campaignEnded, "Campaign is closed");
+
+        contributions[msg.sender] += msg.value;
+        totalFunds += msg.value;
+
+        emit FundReceived(msg.sender, msg.value);
+
+        if (totalFunds >= goal) {
+            goalReached = true;
+        }
     }
 
-    function freezeAccount(address account) public {
-        require(msg.sender == owner, "Only the owner can freeze an account");
-        isFrozen[account] = true;
+    function finishCampaign() public {
+        require(msg.sender == creator, "Only the creator can finish the campaign");
+        require(block.timestamp >= endTime || goalReached, "Campaign cannot be finished yet");
+        require(!campaignEnded, "Campaign is already closed");
+
+        campaignEnded = true;
+
+        if (goalReached) {
+            payable(creator).transfer(address(this).balance);
+        } else {
+            // Allow refunds
+        }
+
+        emit CampaignFinished(goalReached, totalFunds);
     }
 
-    function unfreezeAccount(address account) public {
-        require(msg.sender == owner, "Only the owner can unfreeze an account");
-        isFrozen[account] = false;
-    }
+    function getRefund() public {
+        require(campaignEnded && !goalReached, "Refunds are not available");
+        require(contributions[msg.sender] > 0, "No contribution found");
 
-    function getBalance(address account) public view returns (uint) {
-        return balances[account];
-    }
-
-    function getFrozenStatus(address account) public view returns (bool) {
-        return isFrozen[account];
+        uint amount = contributions[msg.sender];
+        contributions[msg.sender] = 0;
+        payable(msg.sender).transfer(amount);
     }
 }
