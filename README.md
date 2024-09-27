@@ -63,3 +63,41 @@ new_token = Token(user_id, expires_in=7200)
 print("New token:", new_token.token)
 print("New token expires in:", new_token.expires_in, "seconds")
 ```
+
+```
+import hashlib
+import binascii
+```
+# Define a function to hash a string using different algorithms
+```
+def hash_string(s, algorithm):
+    if algorithm == "md5":
+        return hashlib.md5(s.encode()).hexdigest()
+    elif algorithm == "sha1":
+        return hashlib.sha1(s.encode()).hexdigest()
+    elif algorithm == "sha256":
+        return hashlib.sha256(s.encode()).hexdigest()
+    elif algorithm == "sha512":
+        return hashlib.sha512(s.encode()).hexdigest()
+    else:
+        return "Invalid algorithm"
+```
+# Test the function with different strings and algorithms
+```
+strings = ["hello", "world", "python"]
+algorithms = ["md5", "sha1", "sha256", "sha512"]
+
+for s in strings:
+    for algorithm in algorithms:
+        print(f"{s} hashed with {algorithm}: {hash_string(s, algorithm)}")
+```
+# Example usage: hash a string using MD5
+```
+hashed_string = hash_string("hello", "md5")
+print(f"Hashed string: {hashed_string}")
+```
+# Example usage: hash a string using SHA-256
+```
+hashed_string = hash_string("hello", "sha256")
+print(f"Hashed string: {hashed_string}")
+```
