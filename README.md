@@ -1,4 +1,6 @@
 # Import the necessary libraries
+IF you wish to use this code please feel free with this project.
+
 ```
 import hashlib
 import time
