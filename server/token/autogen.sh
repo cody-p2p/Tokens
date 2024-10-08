@@ -1,3 +1,5 @@
+$ bash autogen.sh
+
 #!/bin/bash
 
 # Set the project name and version
