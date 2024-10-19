@@ -1,4 +1,4 @@
-# Import the necessary libraries
+## Import the necessary libraries
 IF you wish to use this code please feel free with this project.
 
 ```
@@ -6,7 +6,7 @@ import hashlib
 import time
 import json
 ```
-# Define the token class
+## Define the token class
 ```
 class Token:
     def __init__(self, user_id, expires_in=3600):
@@ -28,38 +28,38 @@ class Token:
     def get_user_id(self):
         return self.user_id
 ```
-# Create a token for a user
+## Create a token for a user
 ```
 user_id = 123
 token = Token(user_id)
 ```
 
-# Print the token
+## Print the token
 ```
 print("Token:", token.token)
 ```
-# Verify the token
+## Verify the token
 ```
 print("Is token valid?", token.verify_token(token.token))
 ```
-# Try to verify an invalid token
+## Try to verify an invalid token
 ```
 print("Is invalid token valid?", token.verify_token("invalid_token"))
 ```
-# Get the user ID from the token
+## Get the user ID from the token
 ```
 print("User ID:", token.get_user_id())
 ```
-# Token expiration
+## Token expiration
 ```
 print("Token expires in:", token.expires_in, "seconds")
 ```
-# Simulate token expiration
+## Simulate token expiration
 ```
 time.sleep(token.expires_in)
 print("Token still valid?", token.verify_token(token.token))  # Should be False
 ```
-# Create a new token with a new expiration time
+## Create a new token with a new expiration time
 ```
 new_token = Token(user_id, expires_in=7200)
 print("New token:", new_token.token)
@@ -70,7 +70,7 @@ print("New token expires in:", new_token.expires_in, "seconds")
 import hashlib
 import binascii
 ```
-# Define a function to hash a string using different algorithms
+## # Define a function to hash a string using different algorithms
 ```
 def hash_string(s, algorithm):
     if algorithm == "md5":
@@ -84,7 +84,7 @@ def hash_string(s, algorithm):
     else:
         return "Invalid algorithm"
 ```
-# Test the function with different strings and algorithms
+## Test the function with different strings and algorithms
 ```
 strings = ["hello", "world", "python"]
 algorithms = ["md5", "sha1", "sha256", "sha512"]
@@ -93,7 +93,7 @@ for s in strings:
     for algorithm in algorithms:
         print(f"{s} hashed with {algorithm}: {hash_string(s, algorithm)}")
 ```
-# Example usage: hash a string using MD5
+## Example usage: hash a string using MD5
 ```
 hashed_string = hash_string("hello", "md5")
 print(f"Hashed string: {hashed_string}")
